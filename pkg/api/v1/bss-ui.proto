@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package v1;
+option go_package = "github.com/bhojpur/bss/pkg/api/v1";
+import "bss.proto";
+
+message ListOssSpecsRequest{}
+
+message ListOssSpecsResponse {
+    Repository repo = 1;
+    string name = 2;
+    string path = 3;
+    string description = 4;
+    repeated DesiredAnnotation arguments = 5;
+}
+
+// DesiredAnnotation describes an annotation an Operations Support System should have
+message DesiredAnnotation {
+    string name = 1;
+    bool required = 2;
+    string description = 3;
+}
+
+message IsReadOnlyRequest {}
+
+message IsReadOnlyResponse {
+    bool readonly = 1;
+}
+
+// BssUI offers services intended for the Bhojpur BSS web user interface
+service BssUI {
+    // ListOssSpecs returns a list of Operations Support System(s) that can be started through the UI.
+    rpc ListOssSpecs(ListOssSpecsRequest) returns (stream ListOssSpecsResponse) {};
+
+    // IsReadOnly returns true if the UI is readonly.
+    rpc IsReadOnly(IsReadOnlyRequest) returns (IsReadOnlyResponse) {};
+}
